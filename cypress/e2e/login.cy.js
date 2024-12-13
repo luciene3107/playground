@@ -1,7 +1,11 @@
 describe('login', () => {
   it('Deve logar com sucesso', () => {
-    //cy.viewport(1920, 1080)
+    cy.viewport(1920, 1080)
     cy.visit('https://playground.cyskills.com.br')
+
+    //validação para saber se está na página correta
+    cy.contains('h2', 'Faça login')
+      .should('be.visible') 
 
     //preenchimento do formulário
     cy.get('[data-cy="email"]').type('papito@cyskills.com.br')
@@ -10,8 +14,9 @@ describe('login', () => {
     cy.get('[data-cy="login-button"]').click()
 
     //validação do login
-    cy.get('[data-cy="welcome-title"]').should('be.visible').and('have.text', 'Boas vindas ao Cypress Playground')
-
+    cy.get('[data-cy="welcome-title"]')
+      .should('be.visible')
+      .and('have.text', 'Boas vindas ao Cypress Playground')
 
   })
 })
