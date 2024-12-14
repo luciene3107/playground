@@ -8,19 +8,19 @@ describe('login', () => {
     cy.visit('https://playground.cyskills.com.br')
 
     cy.contains('h2', 'Faça login')
-      .should('be.visible') 
+      .should('be.visible')
   })
-/*
-  //executa 1 ou mais steps depois de cada teste
-  afterEach(()=>{})
+  /*
+    //executa 1 ou mais steps depois de cada teste
+    afterEach(()=>{})
+  
+    //executa uma unica vez antes de todos os testes
+    before(()=>{})
+  
+    //executa uma unica vez depois de todos os testes
+    after(()=>{})*/
 
-  //executa uma unica vez antes de todos os testes
-  before(()=>{})
-
-  //executa uma unica vez depois de todos os testes
-  after(()=>{})*/
-
-  it('Deve logar com sucesso', () => {     
+  it('Deve logar com sucesso', () => {
     //preenchimento do formulário
     cy.get('[data-cy="email"]').type('papito@cyskills.com.br')
     cy.get('[data-cy="password"]').type('showtime')
@@ -34,45 +34,33 @@ describe('login', () => {
 
   })
 
-  it('Não deve logar com senha invalida', () => {    
-    //preenchimento do formulário
-    cy.get('[data-cy="email"]').type('papito@cyskills.com.br')
-    cy.get('[data-cy="password"]').type('abc123456')
-
-    cy.get('[data-cy="login-button"]').click()
-
-    //validação do login
-    cy.get('.notice p')
-      .should('be.visible')
-      .and('have.text', 'E-mail ou senha incorretos. Por favor, tente novamente!')
+  it('Não deve logar com senha invalida', () => {
+    cy.login('papito@cyskills.com.br', 'abc123456')
+    cy.noticeHave('E-mail ou senha incorretos. Por favor, tente novamente!')
 
   })
 
-  it('Não deve logar com email não cadastrado', () => {    
-    //preenchimento do formulário
-    cy.get('[data-cy="email"]').type('404@cyskills.com.br')
-    cy.get('[data-cy="password"]').type('showtime')
-
-    cy.get('[data-cy="login-button"]').click()
-
-    //validação do login
-    cy.get('.notice p')
-      .should('be.visible')
-      .and('have.text', 'E-mail ou senha incorretos. Por favor, tente novamente!')
+  it('Não deve logar com email não cadastrado', () => {
+    cy.login('404@cyskills.com.br', 'showtime')
+    cy.noticeHave('E-mail ou senha incorretos. Por favor, tente novamente!')
 
   })
 
-  it('Não deve logar com email incorreto', () => {    
-    //preenchimento do formulário
-    cy.get('[data-cy="email"]').type('wwwcyskills.com.br')
-    cy.get('[data-cy="password"]').type('showtime')
-
-    cy.get('[data-cy="login-button"]').click()
-
-    //validação do login
-    cy.get('.notice p')
-      .should('be.visible')
-      .and('have.text', 'O formato do e-mail está incorreto. Por favor, verifique e tente novamente!')
-
+  it('Não deve logar com email incorreto', () => {
+    cy.login('wwwcyskills.com.br', 'showtime')
+    cy.noticeHave('O formato do e-mail está incorreto. Por favor, verifique e tente novamente!')
   })
+})
+
+Cypress.Commands.add('login', (email, password) => {
+  cy.get('[data-cy="email"]').type(email)
+  cy.get('[data-cy="password"]').type(password)
+
+  cy.get('[data-cy="login-button"]').click()
+})
+
+Cypress.Commands.add('noticeHave', (text) => {
+  cy.get('.notice p')
+    .should('be.visible')
+    .and('have.text', text)
 })
