@@ -3,12 +3,7 @@ describe('login', () => {
   //é um gancho generico que vai implementar um step para todos os testes automatizados
   //executa 1 ou mais steps antes de cada teste
   beforeEach(() => {
-    cy.viewport(1440, 900)
-
-    cy.visit('https://playground.cyskills.com.br')
-
-    cy.contains('h2', 'Faça login')
-      .should('be.visible')
+    cy.goHome()
   })
   /*
     //executa 1 ou mais steps depois de cada teste

@@ -23,6 +23,15 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add('goHome', ()=> {
+  cy.viewport(1440, 900)
+
+    cy.visit('https://playground.cyskills.com.br')
+
+    cy.contains('h2', 'Faça login')
+      .should('be.visible')
+})
+
 Cypress.Commands.add('login', (email, password) => {
     cy.get('[data-cy="email"]').type(email)
     cy.get('[data-cy="password"]').type(password)
